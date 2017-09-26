@@ -18,7 +18,7 @@ Plug 'z0mbix/vim-shfmt', { 'for': 'sh' }
 
 You can use the `:Shfmt` command to run shfmt and automatically format the current buffer
 
-You can also use the `:Shfmt` command together with options. For example, 
+You can also use the `:Shfmt` command together with options. For example,
 
 ```
 :Shfmt -p
@@ -34,6 +34,14 @@ You can also use the `:Shfmt` command together with options. For example,
 
 ```viml
 let g:shfmt_switches = ['-i 2']
+```
+
+### Auto format on save
+
+If you would like to auto format shell scripts on save, you can add the following to your vim config:
+
+```viml
+let g:shfmt_fmt_on_save = 1
 ```
 
 ## License
