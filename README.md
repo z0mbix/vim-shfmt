@@ -33,7 +33,7 @@ You can also use the `:Shfmt` command together with options. For example,
 **shfmt** uses tabs by default for auto formatting, so if you prefer to use 2 spaces, you can set the following in your `.vimrc` file:
 
 ```viml
-let g:shfmt_switches = ['-i 2']
+let g:shfmt_extra_args = '-i 2'
 ```
 
 ### Auto format on save
