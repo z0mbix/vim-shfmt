@@ -49,8 +49,8 @@ endfunction
 augroup shfmt
 	autocmd!
 	if get(g:, "shfmt_fmt_on_save", 1)
-		autocmd BufWritePre *.sh Shfmt
-		autocmd FileType sh autocmd BufWritePre <buffer> Shfmt
+		autocmd BufWritePost *.sh Shfmt
+		autocmd FileType sh autocmd BufWritePost <buffer> Shfmt
 	endif
 augroup END
 
