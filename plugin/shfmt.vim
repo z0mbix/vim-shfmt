@@ -7,7 +7,7 @@
 " License:	 MIT
 " ----------------------------------------------------------------------------
 
-if exists("g:loaded_vimshfmt") || &cp || !executable('shfmt')
+if exists('g:loaded_vimshfmt') || &cp || !executable('shfmt')
 	finish
 endif
 let g:loaded_vimshfmt = 1
@@ -15,12 +15,12 @@ let g:loaded_vimshfmt = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists("g:shfmt_fmt_on_save")
+if !exists('g:shfmt_fmt_on_save')
 	let g:shfmt_fmt_on_save = 0
 endif
 
 if !exists('g:shfmt_cmd')
-	let g:shfmt_cmd = 'shfmt -w'
+	let g:shfmt_cmd = 'shfmt'
 endif
 
 " Options
@@ -42,15 +42,27 @@ function! s:Shfmt(current_args)
 	if a:current_args != ''
 		let l:shfmt_opts = a:current_args
 	endif
-	let l:shfmt_output = system(l:shfmt_cmd . ' ' . l:shfmt_opts . ' ' . l:filename)
-	edit!
+	let l:cursor_position = getcurpos()
+	silent execute  "%!" . l:shfmt_cmd . ' ' . l:shfmt_opts
+	if v:shell_error
+		execute 'echom "shfmt returned an error, undoing changes. Often a syntax error, so check that."'
+		" undo the buffer overwrite because shfmt returns no data on error, so we've erased the
+		" user's work!
+		undo
+	endif
+	" Reset the cursor position if we moved 
+	if l:cursor_position != getcurpos()
+		call setpos('.', l:cursor_position)
+	endif
 endfunction
 
 augroup shfmt
 	autocmd!
-	if get(g:, "shfmt_fmt_on_save", 1)
-		autocmd BufWritePost *.sh Shfmt
-		autocmd FileType sh autocmd BufWritePost <buffer> Shfmt
+	if get(g:, 'shfmt_fmt_on_save', 1)
+		" Use BufWritePre to filter the file before it's written since we're
+		" processing current buffer instead of the saved file. 
+		autocmd BufWritePre *.sh Shfmt
+		autocmd FileType sh autocmd BufWritePre <buffer> Shfmt
 	endif
 augroup END
 
