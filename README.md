@@ -1,6 +1,16 @@
 # Vim plugin for shfmt
 
-The **Vim shfmt** plugin runs [shfmt](https://github.com/mvdan/sh) to auto format the current buffer
+The **Vim shfmt** plugin runs [shfmt](https://github.com/mvdan/sh) to auto format the current buffer by a command `:Shfmt`.
+If instead you prefer to format a textobject, say a paragraph, by `gq`, then add to your `vimrc` the lines
+
+```vim
+if executable('shfmt')
+  let &l:formatprg='shfmt -i ' . &l:shiftwidth . ' -ln posix -sr -ci -s'
+endif
+```
+
+and press, say `gqip`.
+Customize the options ` -ln posix -sr -ci -s` to your liking.
 
 ## Requirements
 
