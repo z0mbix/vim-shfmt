@@ -1,7 +1,7 @@
 # Vim plugin for shfmt
 
 The **Vim shfmt** plugin runs [shfmt](https://github.com/mvdan/sh) to auto format the current buffer by a command `:Shfmt`.
-If instead you prefer to format a textobject, say a paragraph, by `gq`, then add to your `vimrc` the lines
+If instead you prefer to format a textobject, say a paragraph, by `gq`, then add to the file `after/ftplugin/sh.vim` in your Vim configuration folder the lines
 
 ```vim
 if executable('shfmt')
