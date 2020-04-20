@@ -34,27 +34,7 @@ function! s:ShfmtSwitches(...)
 	return join(s:shfmt_switches, "\n")
 endfunction
 
-function! s:Shfmt(current_args)
-	let l:extra_args = g:shfmt_extra_args
-	let l:filename = @%
-	let l:shfmt_cmd = g:shfmt_cmd
-	let l:shfmt_opts = ' ' . a:current_args . ' ' . l:extra_args
-	if a:current_args != ''
-		let l:shfmt_opts = a:current_args
-	endif
-	let l:cursor_position = getcurpos()
-	silent execute  "%!" . l:shfmt_cmd . ' ' . l:shfmt_opts
-	if v:shell_error
-		execute 'echom "shfmt returned an error, undoing changes. Often a syntax error, so check that."'
-		" undo the buffer overwrite because shfmt returns no data on error, so we've erased the
-		" user's work!
-		undo
-	endif
-	" Reset the cursor position if we moved 
-	if l:cursor_position != getcurpos()
-		call setpos('.', l:cursor_position)
-	endif
-endfunction
+command! -range=% -complete=custom,s:ShfmtSwitches -nargs=? Shfmt :call shfmt#shfmt(<q-args>, <line1>, <line2>)
 
 augroup shfmt
 	autocmd!
@@ -65,7 +45,5 @@ augroup shfmt
 		autocmd FileType sh autocmd BufWritePre <buffer> Shfmt
 	endif
 augroup END
-
-command! -complete=custom,s:ShfmtSwitches -nargs=? Shfmt :call <SID>Shfmt(<q-args>)
 
 let &cpo = s:save_cpo
