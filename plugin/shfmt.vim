@@ -34,16 +34,14 @@ function! s:ShfmtSwitches(...)
 	return join(s:shfmt_switches, "\n")
 endfunction
 
-command! -range=% -complete=custom,s:ShfmtSwitches -nargs=? Shfmt :call shfmt#shfmt(<q-args>, <line1>, <line2>)
+command! -bar -range=% -complete=custom,s:ShfmtSwitches -nargs=? Shfmt :call shfmt#shfmt(<q-args>, <line1>, <line2>)
 
 augroup shfmt
 	autocmd!
-	if get(g:, 'shfmt_fmt_on_save', 1)
-		" Use BufWritePre to filter the file before it's written since we're
-		" processing current buffer instead of the saved file. 
-		autocmd BufWritePre *.sh Shfmt
-		autocmd FileType sh autocmd BufWritePre <buffer> Shfmt
-	endif
+	" Use BufWritePre to filter the file before it's written since we're
+	" processing current buffer instead of the saved file.
+	autocmd BufWritePre *.sh if get(g:, 'shfmt_fmt_on_save', 1) | Shfmt | endif
+	autocmd FileType sh autocmd BufWritePre <buffer> if get(g:, 'shfmt_fmt_on_save', 1) | Shfmt | endif
 augroup END
 
 let &cpo = s:save_cpo

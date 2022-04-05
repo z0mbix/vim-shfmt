@@ -14,7 +14,7 @@ function! shfmt#shfmt(current_args, line1, line2) abort
 		" we've erased the user's work!
 		undo
 	endif
-	" Reset the cursor position if we moved 
+	" Reset the cursor position if we moved
 	if l:cursor_position != getcurpos()
 		call setpos('.', l:cursor_position)
 	endif
